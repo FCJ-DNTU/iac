@@ -10,7 +10,7 @@ Because of focusing on AWS Cloud, we need to learn about:
 - **CDK**: use with NodeJS.
 - **CloudFormation**: a service has responsibility for deploy infrastructure and services.
 
-You should read the `README.md` carefully before you start doing something in this repository. That's all, have a good journey.
+You should read the `README.md` carefully before you start doing something in this repository. And some examples will require nodejs packages to run, so you need to have `Node`, `Npm` in your machine and run `npm i` before you do examples.
 
 ## Objectives
 After we following instructions, examples in this repository, we'll have a clearer sight about these following concepts:
