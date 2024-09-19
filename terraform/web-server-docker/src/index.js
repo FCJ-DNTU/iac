@@ -102,13 +102,14 @@ app.get("/albums", (req, res) => {
     for (let i = skip; i < N; i++) {
       if(hasCondition) {
         if (title && titleRegExp.test(Data.albums[i].title)) {
-          Data.users[i] && result.push(Data.users[i]);
+          Data.albums[i] && result.push(Data.albums[i]);
         }
 
         if (result.length < limit && N < Data.albums.length) {
           N += 1;
         }
-      }
+      } else if(Data.albums[i])
+        result.push(Data.albums[i]);
     }
 
     o.data = result;
@@ -121,7 +122,7 @@ app.get("/albums", (req, res) => {
 // Get album
 app.get("/albums/:id", (req, res) => {
   return Utils.Error.handleResponseError(app, res, function(o) {
-    const { id } = req.query;
+    const { id } = req.params;
 
     o.data = Data.albums.find(album => album.id == id);
     o.success.message = "Query album successfully";
@@ -147,13 +148,14 @@ app.get("/posts", (req, res) => {
     for (let i = skip; i < N; i++) {
       if(hasCondition) {
         if (title && titleRegExp.test(Data.posts[i].title)) {
-          Data.users[i] && result.push(Data.users[i]);
+          Data.posts[i] && result.push(Data.posts[i]);
         }
 
         if (result.length < limit && N < Data.posts.length) {
           N += 1;
         }
-      }
+      } else if(Data.posts[i])
+        result.push(Data.posts[i]);
     }
 
     o.data = result;
@@ -166,7 +168,7 @@ app.get("/posts", (req, res) => {
 // Get post
 app.get("/posts/:id", (req, res) => {
   return Utils.Error.handleResponseError(app, res, function(o) {
-    const { id } = req.query;
+    const { id } = req.params;
 
     o.data = Data.posts.find(post => post.id == id);
     o.success.message = "Query post successfully";
@@ -178,27 +180,28 @@ app.get("/posts/:id", (req, res) => {
 // Get comments
 app.get("/comments", (req, res) => {
   return Utils.Error.handleResponseError(app, res, function(o) {
-    const { title } = req.query;
+    const { name } = req.query;
 
-    const titleRegExp = new RegExp(title, "i");
+    const nameRegExp = new RegExp(name, "i");
     const
       limit = req.query.limit ? parseInt(req.query.limit) : 10,
       skip = req.query.skip ? parseInt(req.query.skip) : 0;
 
     const
       result = [],
-      hasCondition = Boolean(title);
+      hasCondition = Boolean(name);
     let N = limit + skip;
     for (let i = skip; i < N; i++) {
       if(hasCondition) {
-        if (title && titleRegExp.test(Data.comments[i].title)) {
-          Data.users[i] && result.push(Data.users[i]);
+        if (name && nameRegExp.test(Data.comments[i].name)) {
+          Data.comments[i] && result.push(Data.comments[i]);
         }
 
         if (result.length < limit && N < Data.comments.length) {
           N += 1;
         }
-      }
+      } else if(Data.comments[i])
+        result.push(Data.comments[i]);
     }
 
     o.data = result;
@@ -211,7 +214,7 @@ app.get("/comments", (req, res) => {
 // Get comment
 app.get("/comments/:id", (req, res) => {
   return Utils.Error.handleResponseError(app, res, function(o) {
-    const { id } = req.query;
+    const { id } = req.params;
 
     o.data = Data.comments.find(comment => comment.id == id);
     o.success.message = "Query comment successfully";
@@ -237,13 +240,14 @@ app.get("/photos", (req, res) => {
     for (let i = skip; i < N; i++) {
       if(hasCondition) {
         if (title && titleRegExp.test(Data.photos[i].title)) {
-          Data.users[i] && result.push(Data.users[i]);
+          Data.photos[i] && result.push(Data.photos[i]);
         }
 
         if (result.length < limit && N < Data.photos.length) {
           N += 1;
         }
-      }
+      } else if(Data.photos[i])
+        result.push(Data.photos[i]);
     }
 
     o.data = result;
@@ -256,7 +260,7 @@ app.get("/photos", (req, res) => {
 // Get photo
 app.get("/photos/:id", (req, res) => {
   return Utils.Error.handleResponseError(app, res, function(o) {
-    const { id } = req.query;
+    const { id } = req.params;
 
     o.data = Data.photos.find(photo => photo.id == id);
     o.success.message = "Query photo successfully";
@@ -282,14 +286,14 @@ app.get("/todos", (req, res) => {
     for (let i = skip; i < N; i++) {
       if(hasCondition) {
         if (title && titleRegExp.test(Data.todos[i].title)) {
-          Data.users[i] && result.push(Data.users[i]);
+          Data.todos[i] && result.push(Data.todos[i]);
         }
 
         if (result.length < limit && N < Data.todos.length) {
           N += 1;
         }
-      } else
-        Data.users[i] && result.push(Data.users[i]);
+      } else if(Data.todos[i])
+        result.push(Data.todos[i]);
     }
 
     o.data = result;
@@ -302,7 +306,7 @@ app.get("/todos", (req, res) => {
 // Get todo
 app.get("/todos/:id", (req, res) => {
   return Utils.Error.handleResponseError(app, res, function(o) {
-    const { id } = req.query;
+    const { id } = req.params;
 
     o.data = Data.todos.find(todo => todo.id == id);
     o.success.message = "Query todo successfully";

@@ -73,3 +73,97 @@ ca3e207ae53c   a1b3d8623fd9   "docker-entrypoint.s…"   4 seconds ago   Up 4 se
 ```
 
 Or view in [http://localhost:3000](http://localhost:3000)
+
+## Test
+When you enter the browser, you will see the response like this
+```json
+{
+  "data": "Welcome to my app",
+  "error": null,
+  "success": {
+    "title": "OK"
+  },
+  "code": 200
+}
+```
+
+Now you can test the application with following paths
+```
+GET - /users
+GET - /users/:id
+GET - /posts
+GET - /posts/:id
+GET - /albums
+GET - /albums/:id
+GET - /comments
+GET - /comments/:id
+GET - /photos
+GET - /photos/:id
+GET - /todos
+GET - /todos/:id
+```
+
+You can use `limit` or `skip` query to skip or get an amount of data, for example
+```
+http://localhost:3000/users?limit=2&skip=5
+```
+
+You can get the result
+```json
+{
+  "data": [
+    {
+      "id": 6,
+      "name": "Mrs. Dennis Schulist",
+      "username": "Leopoldo_Corkery",
+      "email": "Karley_Dach@jasper.info",
+      "address": {
+        "street": "Norberto Crossing",
+        "suite": "Apt. 950",
+        "city": "South Christy",
+        "zipcode": "23505-1337",
+        "geo": {
+          "lat": "-71.4197",
+          "lng": "71.7478"
+        }
+      },
+      "phone": "1-477-935-8478 x6430",
+      "website": "ola.org",
+      "company": {
+        "name": "Considine-Lockman",
+        "catchPhrase": "Synchronised bottom-line interface",
+        "bs": "e-enable innovative applications"
+      }
+    },
+      {
+        "id": 7,
+        "name": "Kurtis Weissnat",
+        "username": "Elwyn.Skiles",
+        "email": "Telly.Hoeger@billy.biz",
+        "address": {
+          "street": "Rex Trail",
+          "suite": "Suite 280",
+          "city": "Howemouth",
+          "zipcode": "58804-1099",
+          "geo": {
+              "lat": "24.8918",
+              "lng": "21.8984"
+            }
+          },
+        "phone": "210.067.6132",
+        "website": "elvis.io",
+        "company": {
+          "name": "Johns Group",
+          "catchPhrase": "Configurable multimedia task-force",
+          "bs": "generate enterprise e-tailers"
+        }
+      }
+  ],
+  "error": null,
+  "success": {
+    "title": "OK",
+    "message": "Query users successfully"
+  },
+  "code": 200
+}
+```
