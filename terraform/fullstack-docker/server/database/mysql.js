@@ -1,17 +1,33 @@
-const mysql2 = require('mysql2');
+const mysql2 = require("mysql2");
 
-console.log("Host:", process.env.MYSQL_CONTAINER);
-console.log("DB User:", process.env.MYSQL_USER);
-console.log("DB Pass:", process.env.MYSQL_USER_PASSWORD);
+const connection = mysql2.createConnection(
+  {
+    host: process.env.MYSQL_HOST || "localhost",
+    user: process.env.MYSQL_USER || "root",
+    password: process.env.MYSQL_USER_PASSWORD || "your-mysql-user-password",
+    database: "TODOAPP",
+  },
+  function (err) {
+    console.log(err);
+  }
+);
 
-const connection = mysql2.createConnection({
-  host: process.env.MYSQL_CONTAINER,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_USER_PASSWORD,
-  database: 'TODOAPP'
-}, function(err) {
-  console.log(err);
-});
+const actions = {
+  async exec(queryString) {
+    const result = new Promise((resolve, reject) => {
+      connection.query(queryString, function (err, results) {
+        if (err) reject(err);
+
+        resolve(results);
+      });
+    });
+
+    return result;
+  },
+};
 
 // Export the connection or use it in your routes
-module.exports = connection;
+module.exports = {
+  mySQLClient: connection,
+  mySQLCLientActions: actions,
+};

@@ -15,7 +15,7 @@ resource "docker_container" "webserver" {
   }
 
   env = [
-    "MYSQL_CONTAINER=${var.database_container_name}",
+    "MYSQL_HOST=${var.database_container_name}",
     "MYSQL_USER=${var.database_user}",
     "MYSQL_USER_PASSWORD=${var.database_user_password}"
   ]

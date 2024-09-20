@@ -49,7 +49,7 @@ export class API {
    * @returns
    */
   private _getURL(...paths: Array<string>) {
-    return StringUtils.getPath(this._http.defaults.baseURL || "", ...paths);
+    return StringUtils.formatURL(this._http.defaults.baseURL || "", ...paths);
   }
 
   /**
@@ -100,7 +100,7 @@ export class API {
   async get<ResponseData>(path: string, config?: AxiosRequestConfig) {
     try {
       const response = await this._http.get<ResponseData>(
-        this._getURL(path),
+        StringUtils.formatURL(path),
         config
       );
       return response;
@@ -122,13 +122,14 @@ export class API {
   ) {
     try {
       const response = await this._http.post<ResponseData>(
-        this._getURL(path),
+        StringUtils.formatURL(path),
         data,
         config
       );
       return response;
     } catch (e: any) {
-      console.warn(e.message);
+      console.warn(e);
+      throw e;
     }
   }
 
@@ -146,13 +147,14 @@ export class API {
   ) {
     try {
       const response = await this._http.put<ResponseData>(
-        this._getURL(path),
+        StringUtils.formatURL(path),
         data,
         config
       );
       return response;
     } catch (e: any) {
-      console.warn(e.message);
+      console.warn(e);
+      throw e;
     }
   }
 
@@ -170,13 +172,14 @@ export class API {
   ) {
     try {
       const response = await this._http.patch<ResponseData>(
-        this._getURL(path),
+        StringUtils.formatURL(path),
         data,
         config
       );
       return response;
     } catch (e: any) {
-      console.warn(e.message);
+      console.warn(e);
+      throw e;
     }
   }
 
@@ -190,12 +193,13 @@ export class API {
   async delete<ResponseData>(path: string, config?: AxiosRequestConfig) {
     try {
       const response = await this._http.delete<ResponseData>(
-        this._getURL(path),
+        StringUtils.formatURL(path),
         config
       );
       return response;
     } catch (e: any) {
-      console.warn(e.message);
+      console.warn(e);
+      throw e;
     }
   }
 }

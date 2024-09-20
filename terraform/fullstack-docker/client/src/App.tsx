@@ -1,12 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+
+// Import hooks
+import { useAuth } from "./hooks/useAuth";
+
+// Import assets
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = React.useState(0);
+  const { state, signin } = useAuth();
 
-  return (
+  React.useEffect(() => {
+    signin({ username: "nguyenanhtuan", password: "hello" }).then(console.log);
+    return function () {};
+  }, []);
+
+  return state.isAuthenticate ? (
     <>
       <div>
         <a href="https://vitejs.dev" target="_blank">
@@ -29,7 +40,11 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
     </>
-  )
+  ) : (
+    <div>
+      <p className="text-3xl font-bold">You have to sign in</p>
+    </div>
+  );
 }
 
-export default App
+export default App;
