@@ -29,6 +29,18 @@ type _KindOfOnFulfilled = {
   ) => AxiosResponse<any, any> | Promise<AxiosResponse<any, any>>;
 };
 
+type Status = {
+  title: string;
+};
+
+type Response<Data> = {
+  success: Status | null;
+  error: Status | null;
+  data: Data;
+  message: string;
+  code: number;
+};
+
 let _instance: API | null = null;
 
 export class API {
@@ -99,13 +111,13 @@ export class API {
    */
   async get<ResponseData>(path: string, config?: AxiosRequestConfig) {
     try {
-      const response = await this._http.get<ResponseData>(
+      const response = await this._http.get<Response<ResponseData>>(
         StringUtils.formatURL(path),
         config
       );
       return response;
     } catch (e: any) {
-      console.warn(e.message);
+      throw e;
     }
   }
 
@@ -121,14 +133,13 @@ export class API {
     config?: AxiosRequestConfig
   ) {
     try {
-      const response = await this._http.post<ResponseData>(
+      const response = await this._http.post<Response<ResponseData>>(
         StringUtils.formatURL(path),
         data,
         config
       );
       return response;
     } catch (e: any) {
-      console.warn(e);
       throw e;
     }
   }
@@ -146,14 +157,13 @@ export class API {
     config?: AxiosRequestConfig
   ) {
     try {
-      const response = await this._http.put<ResponseData>(
+      const response = await this._http.put<Response<ResponseData>>(
         StringUtils.formatURL(path),
         data,
         config
       );
       return response;
     } catch (e: any) {
-      console.warn(e);
       throw e;
     }
   }
@@ -171,14 +181,13 @@ export class API {
     config?: AxiosRequestConfig
   ) {
     try {
-      const response = await this._http.patch<ResponseData>(
+      const response = await this._http.patch<Response<ResponseData>>(
         StringUtils.formatURL(path),
         data,
         config
       );
       return response;
     } catch (e: any) {
-      console.warn(e);
       throw e;
     }
   }
@@ -192,13 +201,12 @@ export class API {
    */
   async delete<ResponseData>(path: string, config?: AxiosRequestConfig) {
     try {
-      const response = await this._http.delete<ResponseData>(
+      const response = await this._http.delete<Response<ResponseData>>(
         StringUtils.formatURL(path),
         config
       );
       return response;
     } catch (e: any) {
-      console.warn(e);
       throw e;
     }
   }

@@ -1,60 +1,126 @@
-import React from "react";
+// import React from "react";
+import { toast } from "react-toastify";
 
 // Import API
 import { API } from "src/api";
 
-// Import other hooks
-import { useStateManager } from "./useStateManager";
+// Import state
+import { useAuthState } from "src/states/auth";
+
+// Import utils
+import { CookieUtils } from "src/utils/cookies";
 
 // Import types
-import type { UserModel, AuthenticationData } from "src/objects/user/type";
+import type {
+  UserModel,
+  AuthenticationData,
+  User,
+} from "src/objects/user/type";
+
+type TokenPayload = {
+  role: string;
+  expire: number;
+  provider: string;
+  iat: number;
+  exp: number;
+};
 
 const api = new API({
   baseURL: import.meta.env.VITE_API_ENDPOINT,
 });
 
 export function useAuth() {
-  const [state, stateFns] = useStateManager(
-    {
-      isAuthenticate: false,
-    },
-    function (changeState) {
-      return {
-        updateIsAuthenticate(status?: boolean) {
-          changeState("isAuthenticate", function () {
-            return Boolean(status);
-          });
-        },
-      };
-    }
-  );
+  const {
+    isAuthenticated,
+    isPending,
+    user,
+    updateIsAuthenticated,
+    updateUser,
+    updateIsPending,
+  } = useAuthState();
 
   const signin = async function (data: AuthenticationData) {
     try {
-      stateFns.updateIsAuthenticate(false);
+      updateIsPending(true);
 
-      const response = await api.post<AuthenticationData, { token: string }>(
-        "/auth/sign-in",
-        data
-      );
+      const response = await api.post<
+        AuthenticationData,
+        { token: string; user: User }
+      >("/auth/sign-in", data);
 
-      stateFns.updateIsAuthenticate(true);
+      const message = response?.data.message;
+      toast.success(message, {
+        position: "top-center",
+        autoClose: 5000,
+      });
+
+      updateIsAuthenticated(true);
+      updateIsPending(false);
+      if (response.data.data.token) {
+        updateUser(response?.data.data.user);
+
+        // Add token to cookie
+        CookieUtils.writePersistentCookie(
+          CookieUtils.TOKEN_NAME + "tkn",
+          response.data.data.token
+        );
+      }
 
       return response?.data;
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      updateIsPending(false);
+      const message = error.response.data.error.message;
+      toast.error(message, {
+        position: "top-center",
+        autoClose: 5000,
+      });
     }
   };
   const signup = async function (data: UserModel) {
     try {
-    } catch (error) {
-      console.error(error);
+      updateIsPending(true);
+
+      const response = await api.post<
+        AuthenticationData,
+        { token: string; user: User }
+      >("/auth/sign-up", data);
+
+      const message = response?.data.message;
+      toast.success(message, {
+        position: "top-center",
+        autoClose: 5000,
+      });
+
+      updateIsAuthenticated(true);
+      updateIsPending(false);
+      updateUser(response?.data.data.user);
+
+      // Add token to cookie
+      CookieUtils.writePersistentCookie(
+        CookieUtils.TOKEN_NAME + "tkn",
+        response.data.data.token
+      );
+
+      return response?.data;
+    } catch (error: any) {
+      updateIsPending(false);
+      const message = error.response.data.error.message;
+      toast.error(message, {
+        position: "top-center",
+        autoClose: 5000,
+      });
     }
   };
-  const logout = async function () {};
+  const logout = function () {
+    CookieUtils.removeCookie(CookieUtils.TOKEN_NAME + "tkn");
+    updateIsAuthenticated(false);
+    updateUser(null);
+  };
 
   return {
-    state,
+    isAuthenticated,
+    isPending,
+    user,
     signin,
     signup,
     logout,
