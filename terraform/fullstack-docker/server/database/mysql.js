@@ -24,6 +24,25 @@ const actions = {
 
     return result;
   },
+
+  getFieldsAndData(obj) {
+    const fields = Object.keys(obj);
+    const fieldsText = fields.join(", ");
+    const fieldsData = fields.map((field) => `"${obj[field]}"`).join(", ");
+
+    return [fieldsText, fieldsData];
+  },
+
+  getFieldsAndDataAsKeyPair(obj) {
+    const fields = Object.keys(obj);
+    const result = fields
+      .map((field) => {
+        if (typeof obj[field] === "string") return `${field} = "${obj[field]}"`;
+        return `${field} = ${obj[field]}`;
+      })
+      .join(", ");
+    return result;
+  },
 };
 
 // Export the connection or use it in your routes

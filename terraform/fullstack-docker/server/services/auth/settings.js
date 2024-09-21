@@ -6,7 +6,7 @@ const AuthSettings = {
     ADMIN: "admin",
   },
   EXPIRATION: {
-    _DEFAULT: { value: "1", postfix: "m" }, // 1 Minutes
+    _DEFAULT: { value: "15", postfix: "m" }, // 1 Minutes
   },
 };
 

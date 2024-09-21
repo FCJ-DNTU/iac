@@ -1,5 +1,7 @@
 # Fullstack application with Docker
+
 ## About
+
 Suppose you have an application which interacts with server to do some tasks, your application can be splited into 3 sub applications, so how do you deploy it to docker?. In this example, we'll deploy a simple fullstack application with Client App, Server and Database without docker compose.
 
 > Note: You can modify the configuration to deploy you own system.
@@ -15,24 +17,29 @@ sudo bash scripts/install-mysql.sh
 ### 2 - Get the current working directory string
 
 When the installation is done, check the current working directory with
+
 ```bash
 echo $PWD
 ```
+
 And copy the result.
 
 ### 3 - Go into MySQL Command Line and use SQL Script to create required Database, tables.
 
 Now, you have to run `database/scripts/init.sql` with MySQL Command Line to create required database, tables.
+
 ```bash
 sudo mysql -u root
 ```
 
 In MySQL Command Line
+
 ```
 mysql > source <your-current-working-directory>database/scripts/init.sql
 ```
 
 And you'll see the result
+
 ```
 Query OK, 1 row affected (0.03 sec)
 
@@ -47,6 +54,7 @@ Query OK, 0 rows affected (0.03 sec)
 ```
 mysql > SHOW DATABASES;
 ```
+
 ```
 +--------------------+
 | Database           |
@@ -60,20 +68,53 @@ mysql > SHOW DATABASES;
 5 rows in set (0.00 sec)
 ```
 
+### 5 - Run Client and Server application
 
+First, go to `server/scripts/start.sh`, modify these environment variables' value:
+
+```bash
+export MYSQL_HOST="localhost"
+export MYSQL_USER="your-user-here"
+export MYSQL_USER_PASSWORD="your-password-of-user"
+```
+
+Then you run the `scripts/start.sh` in `server`.
+
+```bash
+bash scripts/start.sh
+```
+
+Now, go to `client`, and run
+
+```bash
+npm run dev
+```
+
+```bash
+VITE v5.4.6  ready in 256 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://172.25.207.155:5173/
+  ➜  press h + enter to show help
+```
+
+Good luck!
 
 ## Steps
 
 Follow these step to deploy the application to docker with Terraform.
 
 ### 1 - Build image
+
 First, you need to build 3 images for Client Application, Server Application and Database Server
+
 ```bash
 bash scripts/setup.sh
 ```
 
 You'll receive these results
 Image of Client Application
+
 ```bash
 [+] Building 9.9s (10/10) FINISHED                                                                                    docker:default
 ...
@@ -85,6 +126,7 @@ Image of Client Application
 ```
 
 Image of Server Application
+
 ```bash
 [+] Building 170.7s (9/9) FINISHED                                                                                    docker:default
 ...
@@ -96,6 +138,7 @@ Image of Server Application
 ```
 
 Image of Database Server
+
 ```bash
 [+] Building 51.2s (8/8) FINISHED                                                                                     docker:default
 ...
@@ -107,6 +150,7 @@ Image of Database Server
 ```
 
 Run `docker image ls` to check the result
+
 ```bash
 REPOSITORY              TAG       IMAGE ID       CREATED         SIZE
 server-database-image   latest    bbff0e921b0b   2 minutes ago   586MB
@@ -117,12 +161,15 @@ nginx                   latest    39286ab8a5e1   5 weeks ago     188MB
 ```
 
 ### 2 - Create modules
+
 You need to create modules first
+
 ```bash
 terraform get
 ```
 
 You will see the result
+
 ```bash
 - client-app in modules/terraform-client-app
 - server-app in modules/terraform-server-app
@@ -130,9 +177,11 @@ You will see the result
 ```
 
 Check providers in each modules
+
 ```bash
 terraform providers
 ```
+
 ```bash
 Providers required by configuration:
 .
@@ -146,12 +195,15 @@ Providers required by configuration:
 ```
 
 ### 3 - Make plan
+
 Then you tell terraform to create plan for you deployment.
+
 ```bash
 terraform init
 ```
 
 You will get the result
+
 ```bash
 Initializing the backend...
 Initializing modules...
@@ -179,7 +231,9 @@ commands will detect it and remind you to do so if necessary.
 ```
 
 ### 4 - Apply plan
+
 Now our applications are ready, we should tell Terraform to apply the plan
+
 ```bash
 terraform apply
 ```

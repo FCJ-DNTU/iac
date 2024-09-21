@@ -1,4 +1,5 @@
 // import React from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // Import API
@@ -17,19 +18,22 @@ import type {
   User,
 } from "src/objects/user/type";
 
-type TokenPayload = {
-  role: string;
-  expire: number;
-  provider: string;
-  iat: number;
-  exp: number;
-};
-
 const api = new API({
   baseURL: import.meta.env.VITE_API_ENDPOINT,
 });
 
+// Add global hook to api
+api.hook("response", undefined, function (error) {
+  const message = error?.response.data.error.message;
+  toast.error(message, {
+    position: "top-center",
+    autoClose: 5000,
+  });
+  return Promise.reject(error);
+});
+
 export function useAuth() {
+  const navigate = useNavigate();
   const {
     isAuthenticated,
     isPending,
@@ -48,7 +52,8 @@ export function useAuth() {
         { token: string; user: User }
       >("/auth/sign-in", data);
 
-      const message = response?.data.message;
+      const message =
+        response?.data?.success?.message || "Sign in successfully";
       toast.success(message, {
         position: "top-center",
         autoClose: 5000,
@@ -69,11 +74,7 @@ export function useAuth() {
       return response?.data;
     } catch (error: any) {
       updateIsPending(false);
-      const message = error.response.data.error.message;
-      toast.error(message, {
-        position: "top-center",
-        autoClose: 5000,
-      });
+      navigate("/");
     }
   };
   const signup = async function (data: UserModel) {
@@ -85,7 +86,8 @@ export function useAuth() {
         { token: string; user: User }
       >("/auth/sign-up", data);
 
-      const message = response?.data.message;
+      const message =
+        response?.data?.success?.message || "Sign up successfully";
       toast.success(message, {
         position: "top-center",
         autoClose: 5000,
@@ -104,11 +106,7 @@ export function useAuth() {
       return response?.data;
     } catch (error: any) {
       updateIsPending(false);
-      const message = error.response.data.error.message;
-      toast.error(message, {
-        position: "top-center",
-        autoClose: 5000,
-      });
+      navigate("/");
     }
   };
   const logout = function () {

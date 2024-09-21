@@ -1,6 +1,7 @@
 import axios from "axios";
 
 // Import from utils
+import { CookieUtils } from "src/utils/cookies";
 import { StringUtils } from "src/utils/string";
 
 // Import types
@@ -31,13 +32,13 @@ type _KindOfOnFulfilled = {
 
 type Status = {
   title: string;
+  message: string;
 };
 
 type Response<Data> = {
   success: Status | null;
   error: Status | null;
   data: Data;
-  message: string;
   code: number;
 };
 
@@ -46,13 +47,23 @@ let _instance: API | null = null;
 export class API {
   private _http!: Axios;
 
-  constructor(config: AxiosRequestConfig) {
+  constructor(config?: AxiosRequestConfig) {
     if (_instance) return _instance;
 
     this._http = axios.create(config);
 
     // Place this in the last line
     _instance = this;
+  }
+
+  static getToken(name: string = "tkn") {
+    return CookieUtils.readCookie(CookieUtils.TOKEN_NAME + name);
+  }
+
+  static generateBearerToken(token: string, isHTTPHeader: boolean = false) {
+    const result = `Bearer ${token}`;
+    if (isHTTPHeader) return { Authorization: result };
+    return result;
   }
 
   /**

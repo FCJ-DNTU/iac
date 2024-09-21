@@ -21,9 +21,8 @@ authController.appendHandler(
 
       if (!user[0]) throw new Error("This user existed");
 
-      const fields = Object.keys(data);
-      const fieldsText = fields.join(", ");
-      const fieldsData = fields.map((field) => `"${data[field]}"`).join(", ");
+      const [fieldsText, fieldsData] =
+        mySQLCLientActions.getFieldsAndData(data);
       const result = await mySQLCLientActions.exec(
         `INSERT INTO ${usersTable} (${fieldsText})\n` +
           `VALUES (${fieldsData});`
