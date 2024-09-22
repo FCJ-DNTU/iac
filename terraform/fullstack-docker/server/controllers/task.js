@@ -17,7 +17,6 @@ taskController.appendHandler(
     [checkToken, createPolicyChecker("tasks:*", "tasks:getTasks")],
     function (req, res) {
       const { skip = 0, limit = 10 } = req.query;
-
       return this.utils.Error.handleResponseError(
         this,
         res,
@@ -40,14 +39,14 @@ taskController.appendHandler(
     "get",
     [checkToken, createPolicyChecker("tasks:*", "tasks:getTask")],
     function (req, res) {
-      const { skip = 0, limit = 10 } = req.query;
+      const { id } = req.params;
 
       return this.utils.Error.handleResponseError(
         this,
         res,
         async function (o) {
           const result = await mySQLCLientActions.exec(
-            `SELECT * FROM ${tableName}\n` + `LIMIT ${limit} OFFSET ${skip};`
+            `SELECT * FROM ${tableName}\n` + `WHERE ${tableName}.id = ${id};`
           );
 
           o.data = result[0];
@@ -62,9 +61,9 @@ taskController.appendHandler(
 
 taskController.appendHandler(
   new Handler(
-    "/:id",
+    "/standalone",
     "post",
-    [checkToken, createPolicyChecker("tasks:task", "tasks:getTask")],
+    [checkToken, createPolicyChecker("tasks:task", "tasks:addTask")],
     function (req, res) {
       const data = req.body;
 
@@ -99,21 +98,22 @@ taskController.appendHandler(
   new Handler(
     "/:id",
     "patch",
-    [checkToken, createPolicyChecker("tasks:task", "tasks:getTask")],
+    [checkToken, createPolicyChecker("tasks:task", "tasks:updateTask")],
     function (req, res) {
-      const data = query.body;
+      const { id } = req.params;
+      const data = req.body;
 
       return this.utils.Error.handleResponseError(
         this,
         res,
         async function (o) {
-          if (data.id) throw new Error("The id of task is required");
+          if (!id) throw new Error("The id of task is required");
 
           const newFieldsAndValues =
             mySQLCLientActions.getFieldsAndDataAsKeyPair(data);
           const result = await mySQLCLientActions.exec(
-            `UPDATE ${tableName}` +
-              `SET ${newFieldsAndValues}``WHERE ${tableName}.id == ${data.id}`
+            `UPDATE ${tableName}\n` +
+              `SET ${newFieldsAndValues}``WHERE ${tableName}.id = ${id};`
           );
 
           o.data = result[0];
@@ -132,16 +132,16 @@ taskController.appendHandler(
     "delete",
     [checkToken, createPolicyChecker("tasks:task", "tasks:deleteTask")],
     function (req, res) {
-      const data = query.body;
+      const { id } = req.params;
 
       return this.utils.Error.handleResponseError(
         this,
         res,
         async function (o) {
-          if (data.id) throw new Error("The id of task is required");
+          if (!id) throw new Error("The id of task is required");
 
           const result = await mySQLCLientActions.exec(
-            `DELETE FROM ${tableName}` + `WHERE ${tableName}.id == ${data.id}`
+            `DELETE FROM ${tableName}\n` + `WHERE ${tableName}.id = ${id};`
           );
 
           o.data = result[0];

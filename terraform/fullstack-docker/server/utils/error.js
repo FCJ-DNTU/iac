@@ -12,9 +12,12 @@ class ErrorUtils {
    */
   async handleResponseError(ctx, res, fn) {
     let result = this.http.generateHTTPResponseData(200);
-
     try {
       result = await fn.call(ctx, result);
+      if (result && result.message) {
+        result.success.message = result.message;
+        delete result.message;
+      }
     } catch (error) {
       let code = result.code === 200 ? 500 : result.code;
       result = this.http.generateHTTPResponseData(

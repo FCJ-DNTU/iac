@@ -9,6 +9,7 @@ import { API } from "src/api";
 import { useAuthState } from "src/states/auth";
 
 // Import utils
+import { BrowserStorageUtils } from "src/utils/browser_storage";
 import { CookieUtils } from "src/utils/cookies";
 
 // Import types
@@ -71,6 +72,16 @@ export function useAuth() {
         );
       }
 
+      if (response.data.data.user) {
+        // Save to local storage
+        BrowserStorageUtils.setItem("user", response?.data.data.user);
+      } else {
+        // Get user from local storage
+        const user = BrowserStorageUtils.getItem("user") as UserModel;
+        user.id = Number(user.id);
+        updateUser(user);
+      }
+
       return response?.data;
     } catch (error: any) {
       updateIsPending(false);
@@ -103,16 +114,20 @@ export function useAuth() {
         response.data.data.token
       );
 
+      // Save to local storage
+      BrowserStorageUtils.setItem("user", response?.data.data.user);
+
       return response?.data;
     } catch (error: any) {
       updateIsPending(false);
       navigate("/");
     }
   };
-  const logout = function () {
+  const signout = function () {
     CookieUtils.removeCookie(CookieUtils.TOKEN_NAME + "tkn");
     updateIsAuthenticated(false);
     updateUser(null);
+    navigate("/");
   };
 
   return {
@@ -121,6 +136,6 @@ export function useAuth() {
     user,
     signin,
     signup,
-    logout,
+    signout,
   };
 }

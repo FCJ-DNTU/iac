@@ -19,7 +19,7 @@ authController.appendHandler(
           `WHERE ${usersTable}.username LIKE '${data.username}'`
       );
 
-      if (!user[0]) throw new Error("This user existed");
+      if (user[0]) throw new Error("This user existed");
 
       const [fieldsText, fieldsData] =
         mySQLCLientActions.getFieldsAndData(data);
@@ -38,8 +38,6 @@ authController.appendHandler(
         token: await authService.createToken("USER"),
       };
       o.message = "Sign up successfully";
-
-      if (results.length === 0) o.message = "";
 
       return o;
     });
@@ -63,7 +61,7 @@ authController.appendHandler(
           user: null,
           token: null,
         };
-        o.message = "Sign up successfully";
+        o.message = "Sign in successfully";
 
         return o;
       }
@@ -82,7 +80,7 @@ authController.appendHandler(
         user: user[0],
         token: await authService.createToken("USER"),
       };
-      o.message = "Sign up successfully";
+      o.message = "Sign in successfully";
 
       return o;
     });

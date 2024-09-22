@@ -53,8 +53,45 @@ function wait(time = 0) {
   });
 }
 
+/**
+ * Delete an item in array at index.
+ * @param arr
+ * @returns
+ */
+function deleteAt(arr: Array<any>, index: number) {
+  arr.splice(index, 1);
+  return arr;
+}
+
+/**
+ * Insert a new `item` at `index`.
+ * @param arr
+ * @param index
+ * @param item
+ * @returns
+ */
+function insertAt(arr: Array<any>, index: number, item: any) {
+  arr.splice(index, 0, item);
+  return arr;
+}
+
+/**
+ * Replace a new `item` at `index`.
+ * @param arr
+ * @param index
+ * @param item
+ * @returns
+ */
+function replaceAt(arr: Array<any>, index: number, item: any) {
+  arr.splice(index, 1, item);
+  return arr;
+}
+
 export const OtherUtils = {
   fromCase,
   togglePropertyState,
   wait,
+  deleteAt,
+  insertAt,
+  replaceAt,
 };

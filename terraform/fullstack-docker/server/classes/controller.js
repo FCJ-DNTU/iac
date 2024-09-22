@@ -47,7 +47,7 @@ class Controller {
     for (const handler of this.handlers) {
       const path = this.utils.String.getPath(this.path, handler.path);
       console.log(
-        `Handler - Method: ${handler.method.toUpperCase()}; Path: ${path}`
+        `Path: Path: ${path} ----- Method: ${handler.method.toUpperCase()}`
       );
       const final = handler.middlewares
         ? handler.middlewares.concat(handler.get())

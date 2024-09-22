@@ -28,7 +28,13 @@ const actions = {
   getFieldsAndData(obj) {
     const fields = Object.keys(obj);
     const fieldsText = fields.join(", ");
-    const fieldsData = fields.map((field) => `"${obj[field]}"`).join(", ");
+    const fieldsData = fields
+      .map((field) => {
+        if (typeof obj[field] === "string") return `"${obj[field]}"`;
+        if (typeof obj[field] === "boolean") return `${obj[field] ? 1 : 0}`;
+        return `${obj[field]}`;
+      })
+      .join(", ");
 
     return [fieldsText, fieldsData];
   },
@@ -38,6 +44,8 @@ const actions = {
     const result = fields
       .map((field) => {
         if (typeof obj[field] === "string") return `${field} = "${obj[field]}"`;
+        if (typeof obj[field] === "boolean")
+          return `${field} = ${obj[field] ? 1 : 0}`;
         return `${field} = ${obj[field]}`;
       })
       .join(", ");
