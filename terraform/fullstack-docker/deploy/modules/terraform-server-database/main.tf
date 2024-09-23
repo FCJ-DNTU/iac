@@ -1,4 +1,4 @@
-resource "docker_image" "database-image" {
+resource "docker_image" "database_image" {
   # The name of docker image that you give it
   # when run docker build command
   name = var.image_name
@@ -12,7 +12,7 @@ resource "docker_network" "network" {
 
 # Run container
 resource "docker_container" "database" {
-  image = docker_image.database-image.image_id
+  image = docker_image.database_image.image_id
   name = var.container_name
 
   networks_advanced {

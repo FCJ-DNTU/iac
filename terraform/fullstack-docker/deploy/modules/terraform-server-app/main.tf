@@ -1,4 +1,4 @@
-resource "docker_image" "server-image" {
+resource "docker_image" "server_image" {
   # The name of docker image that you give it
   # when run docker build command
   name = var.image_name
@@ -7,8 +7,11 @@ resource "docker_image" "server-image" {
 
 # Run container
 resource "docker_container" "webserver" {
-  image = docker_image.server-image.image_id
+  image = docker_image.server_image.image_id
   name = var.container_name
+
+  # Use variables are passed from var to link the dependencies
+  depends_on = [ var.database_container_id, var.database_container_hostname ]
 
   networks_advanced {
     name = var.network_name
@@ -22,6 +25,13 @@ resource "docker_container" "webserver" {
 
   ports {
     internal = 8000
-    external = 3000
+    external = 8000
   }
+
+  # Make sure MySQL Server in database container is running
+  # By checking with netcat, it will check again after fail 5 seconds.
+  entrypoint = [
+    "/bin/sh", "-c",
+    "until nc -z -v -w30 ${var.database_container_name} 3306; do echo 'Waiting for MySQL...'; sleep 5; done && npm start"
+  ]
 }

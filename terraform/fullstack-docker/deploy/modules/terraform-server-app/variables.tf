@@ -27,3 +27,13 @@ variable "database_container_name" {
   description = "Name of database container"
   type = string
 }
+
+variable "database_container_hostname" {
+  description = "Hostname of database container"
+  type = string
+}
+
+variable "database_container_id" {
+  description = "Id of database container"
+  type = string
+}

@@ -1,21 +1,22 @@
-module "client-app" {
+module "client" {
   source = "./modules/terraform-client-app"
-
-  providers = {
-    docker = docker
-  }
 
   image_name = "client-app-image"
   container_name = "client-app-container"
   network_name = "public-network"
 }
 
-module "server-app" {
-  source = "./modules/terraform-server-app"
+module "database" {
+  source = "./modules/terraform-server-database"
 
-  providers = {
-    docker = docker
-  }
+  image_name = "server-database-image"
+  container_name = "server-database-container"
+  network_name = "private-network"
+  mysql_password = "test"
+}
+
+module "server" {
+  source = "./modules/terraform-server-app"
 
   image_name = "server-app-image"
   container_name = "server-app-container"
@@ -24,18 +25,9 @@ module "server-app" {
   database_user = "root"
   database_user_password = "test"
 
-  depends_on = [ module.server-database, module.server-database.database_id ]
-}
+  # Make a explicit dependence on database
+  database_container_hostname = module.database.endpoint
+  database_container_id = module.database.container_id
 
-module "server-database" {
-  source = "./modules/terraform-server-database"
-
-  providers = {
-    docker = docker
-  }
-
-  image_name = "server-database-image"
-  container_name = "server-database-container"
-  network_name = "private-network"
-  mysql_password = "test"
+  depends_on = [ module.database ]
 }

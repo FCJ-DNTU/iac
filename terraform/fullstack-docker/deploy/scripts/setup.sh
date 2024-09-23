@@ -6,6 +6,6 @@ serverImageName="server-app-image"
 databaseImageName="server-database-image"
 
 # Build image
-docker build ./client -t $clientImageName
-docker build ./server -t $serverImageName
-docker build ./database -t $databaseImageName
+docker build ../client -t $clientImageName
+docker build ../server -t $serverImageName
+docker build ../database -t $databaseImageName

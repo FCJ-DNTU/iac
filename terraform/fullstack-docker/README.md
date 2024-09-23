@@ -106,7 +106,7 @@ Follow these step to deploy the application to docker with Terraform.
 
 ### 1 - Build image
 
-First, you need to build 3 images for Client Application, Server Application and Database Server
+First, you need to build 3 images for Client Application, Server Application and Database Server. Change directory to `fullstack-docker/deploy`.
 
 ```bash
 bash scripts/setup.sh
@@ -214,20 +214,11 @@ Initializing provider plugins...
 Partner and community providers are signed by their developers.
 If you'd like to know more about provider signing, you can read about it here:
 https://www.terraform.io/docs/cli/plugins/signing.html
-Terraform has created a lock file .terraform.lock.hcl to record the provider
-selections it made above. Include this file in your version control repository
-so that Terraform can guarantee to make the same selections by default when
-you run "terraform init" in the future.
+...
 
 Terraform has been successfully initialized!
 
-You may now begin working with Terraform. Try running "terraform plan" to see
-any changes that are required for your infrastructure. All Terraform commands
-should now work.
-
-If you ever set or change modules or backend configuration for Terraform,
-rerun this command to reinitialize your working directory. If you forget, other
-commands will detect it and remind you to do so if necessary.
+...
 ```
 
 ### 4 - Apply plan
@@ -238,6 +229,91 @@ Now our applications are ready, we should tell Terraform to apply the plan
 terraform apply
 ```
 
+You will see outputs, depend on you docker
+
+```bash
+Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+client_container_external_port = tolist([
+  {
+    "external" = 5500
+    "internal" = 5173
+    "ip" = "0.0.0.0"
+    "protocol" = "tcp"
+  },
+])
+client_container_id = "*****"
+client_endpoint = ""*****""
+database_container_external_port = tolist([
+  {
+    "external" = 32772
+    "internal" = 3306
+    "ip" = "0.0.0.0"
+    "protocol" = "tcp"
+  },
+])
+database_container_id = ""*****""
+database_endpoint = ""*****""
+server_container_external_port = tolist([
+  {
+    "external" = 8000
+    "internal" = 8000
+    "ip" = "0.0.0.0"
+    "protocol" = "tcp"
+  },
+])
+```
+
 ### 5 - View result
 
-## Test
+Before we go to test the application, you should go to **Server Container**, enter the logs tab and make sure your server connect to mysql server inside **Database Container** successfully.
+
+```bash
+2024-09-23 09:46:05 Waiting for MySQL...
+2024-09-23 09:46:10 Waiting for MySQL...
+2024-09-23 09:46:15 Waiting for MySQL...
+2024-09-23 09:46:20 Waiting for MySQL...
+2024-09-23 09:46:25 Waiting for MySQL...
+2024-09-23 09:46:30 server-database-container (172.18.0.2:3306) open
+2024-09-23 09:46:30
+2024-09-23 09:46:30 > start
+2024-09-23 09:46:30 > node index.js
+2024-09-23 09:46:30
+2024-09-23 09:46:31 Path: Path: /auth/sign-up ----- Method: POST
+2024-09-23 09:46:31 Path: Path: /auth/sign-in ----- Method: POST
+2024-09-23 09:46:31 Path: Path: /users/:id ----- Method: GET
+2024-09-23 09:46:31 Path: Path: /users/:id/tasks ----- Method: GET
+2024-09-23 09:46:31 Path: Path: /users/:id/tasks/:taskId ----- Method: GET
+2024-09-23 09:46:31 Path: Path: /users/:id/task ----- Method: POST
+2024-09-23 09:46:31 Path: Path: /users/:id/tasks/:taskId ----- Method: PATCH
+2024-09-23 09:46:31 Path: Path: /users/:id/tasks/:taskId ----- Method: DELETE
+2024-09-23 09:46:31 Path: Path: /tasks/ ----- Method: GET
+2024-09-23 09:46:31 Path: Path: /tasks/:id ----- Method: GET
+2024-09-23 09:46:31 Path: Path: /tasks/standalone ----- Method: POST
+2024-09-23 09:46:31 Path: Path: /tasks/:id ----- Method: PATCH
+2024-09-23 09:46:31 Path: Path: /tasks/:id ----- Method: DELETE
+2024-09-23 09:46:31 Your server is listening on http://localhost:8000
+```
+
+Now, open the client application by `http://localhost:5500`, you will be redirect to sign in page. Let's make an account.
+
+IMAGE HERE
+
+Now you will see the Home Page, click `Navigate to Todo`
+
+IMAGE HERE
+
+And the task form will be showed up, let's assign a task
+
+IMAGE HERE
+IMAGE HERE
+
+Then mark it as done and go to **Complete** tab
+
+IMAGE HERE
+
+After 15 minutes, your token will be expired, then you have to re-sign in.
+
+That's all.
