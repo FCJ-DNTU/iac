@@ -268,51 +268,28 @@ server_container_external_port = tolist([
 
 ### 5 - View result
 
-Before we go to test the application, you should go to **Server Container**, enter the logs tab and make sure your server connect to mysql server inside **Database Container** successfully.
-
-```bash
-2024-09-23 09:46:05 Waiting for MySQL...
-2024-09-23 09:46:10 Waiting for MySQL...
-2024-09-23 09:46:15 Waiting for MySQL...
-2024-09-23 09:46:20 Waiting for MySQL...
-2024-09-23 09:46:25 Waiting for MySQL...
-2024-09-23 09:46:30 server-database-container (172.18.0.2:3306) open
-2024-09-23 09:46:30
-2024-09-23 09:46:30 > start
-2024-09-23 09:46:30 > node index.js
-2024-09-23 09:46:30
-2024-09-23 09:46:31 Path: Path: /auth/sign-up ----- Method: POST
-2024-09-23 09:46:31 Path: Path: /auth/sign-in ----- Method: POST
-2024-09-23 09:46:31 Path: Path: /users/:id ----- Method: GET
-2024-09-23 09:46:31 Path: Path: /users/:id/tasks ----- Method: GET
-2024-09-23 09:46:31 Path: Path: /users/:id/tasks/:taskId ----- Method: GET
-2024-09-23 09:46:31 Path: Path: /users/:id/task ----- Method: POST
-2024-09-23 09:46:31 Path: Path: /users/:id/tasks/:taskId ----- Method: PATCH
-2024-09-23 09:46:31 Path: Path: /users/:id/tasks/:taskId ----- Method: DELETE
-2024-09-23 09:46:31 Path: Path: /tasks/ ----- Method: GET
-2024-09-23 09:46:31 Path: Path: /tasks/:id ----- Method: GET
-2024-09-23 09:46:31 Path: Path: /tasks/standalone ----- Method: POST
-2024-09-23 09:46:31 Path: Path: /tasks/:id ----- Method: PATCH
-2024-09-23 09:46:31 Path: Path: /tasks/:id ----- Method: DELETE
-2024-09-23 09:46:31 Your server is listening on http://localhost:8000
-```
+Before we test the application, we should go to **Server Container** in Docker Desktop, go to the **Logs** tab and make sure your server connect to mysql server inside **Database Container** successfully llike this
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/e10818ed-4a63-4da5-932c-3f8354b9685c" />
+</p>
 
 Now, open the client application by `http://localhost:5500`, you will be redirect to sign in page. Let's make an account.
 
-IMAGE HERE
+![2024-09-23_095154](https://github.com/user-attachments/assets/9cb762e2-2278-44a9-82b8-3f720e4de852)
 
-Now you will see the Home Page, click `Navigate to Todo`
+After you sign up account successfully,  you will see the **Home Page**, click `Navigate to Todo`
 
-IMAGE HERE
+![2024-09-23_095233](https://github.com/user-attachments/assets/329f2b2c-a335-4c80-95a5-5cf0aa6a84d6)
 
-And the task form will be showed up, let's assign a task
+And the task form will be showed up, let's assign a task. Then **mark it as done**.
 
-IMAGE HERE
-IMAGE HERE
+![2024-09-23_095536](https://github.com/user-attachments/assets/ab5b8486-d897-4a17-b198-7645eba7c096)
+![2024-09-23_095600](https://github.com/user-attachments/assets/d4aa95bf-8f3f-49fb-9cd3-26d5210a5279)
 
-Then mark it as done and go to **Complete** tab
 
-IMAGE HERE
+Go to **Complete** tab
+
+![2024-09-23_095618](https://github.com/user-attachments/assets/95878176-cd43-407e-af23-fe8709e5efa4)
 
 After 15 minutes, your token will be expired, then you have to re-sign in.
 
