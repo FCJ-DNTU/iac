@@ -5,12 +5,10 @@
 In this example, we'll deploy a simple infrastructure with an EC2. We have learned about Terraform Module before, so in this example, I'll split the Root Module into 2 sub-modules (`infrastucture` and `ec2`).
 
 ## Infrastructure
-
-INSERT IMAGE HERE
+![image](https://github.com/user-attachments/assets/4250ebe0-5f0a-4ac3-83a9-3d82f8a36129)
 
 ## Dependencies Map
-
-INSERT IMAGE HERE
+![image](https://github.com/user-attachments/assets/56aaa321-3747-4d9a-aba3-a743db4cf22a)
 
 ## Steps
 
@@ -97,10 +95,23 @@ Apply complete! Resources: 14 added, 0 changed, 0 destroyed.
 ```
 
 ## 4 - View result
+Search **VPC** and go to **Your VPCs** selection, choose `terranet` and select `Resource map` tab in below, you will see the map of resources that are created with this VPC
+![image](https://github.com/user-attachments/assets/a0b38339-981d-4d2a-bdb5-0711cfae2dec)
+
+Next, search **EC2** and go to **Instances** selection, enter `terra` in the filter input, choose state = "Running".
+![image](https://github.com/user-attachments/assets/a91def23-1683-4bcf-b130-0d785fb65601)
+
+Now we need the public ipv4 of `terra_public_ec2`, then connect SSH to that instance
+![image](https://github.com/user-attachments/assets/3345f236-643f-4237-bf41-4a55c7e00dfb)
+
+Then open the MobaXterm to start a new SSH session, and here is the result
+![image](https://github.com/user-attachments/assets/676d1774-46e7-4b29-af87-7598d582084e)
+
+> Note: if you choose correct key-pair, you will start new session successfully.
 
 ## 5 - Clean up resources
 
-When you run `terraform destroy`, Terraform will ask you again, just enter "yes" to clean up resources.
+When you run `terraform destroy`, Terraform will ask you again, just enter "yes" to clean up resources. Choose `terra_public_ec2`, copy the ip in Public** IPv4 address**
 
 ```bash
 terraform destroy
