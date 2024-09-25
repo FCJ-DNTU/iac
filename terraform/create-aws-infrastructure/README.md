@@ -5,9 +5,11 @@
 In this example, we'll deploy a simple infrastructure with an EC2. We have learned about Terraform Module before, so in this example, I'll split the Root Module into 2 sub-modules (`infrastucture` and `ec2`).
 
 ## Infrastructure
+
 ![image](https://github.com/user-attachments/assets/4250ebe0-5f0a-4ac3-83a9-3d82f8a36129)
 
 ## Dependencies Map
+
 ![image](https://github.com/user-attachments/assets/56aaa321-3747-4d9a-aba3-a743db4cf22a)
 
 ## Steps
@@ -91,10 +93,11 @@ module.infrastructure.aws_vpc.terranet: Creation complete after 14s [id=vpc-01f6
 ...
 module.public_ec2.aws_instance.terra_ec2: Creation complete after 35s [id=i-002d0b9924414b8f8]
 
-Apply complete! Resources: 14 added, 0 changed, 0 destroyed.
+Apply complete! Resources: 16 added, 0 changed, 0 destroyed.
 ```
 
 ## 4 - View result
+
 Search **VPC** and go to **Your VPCs** selection, choose `terranet` and select `Resource map` tab in below, you will see the map of resources that are created with this VPC
 ![image](https://github.com/user-attachments/assets/a0b38339-981d-4d2a-bdb5-0711cfae2dec)
 
@@ -107,7 +110,7 @@ Now we need the public ipv4 of `terra_public_ec2`, then connect SSH to that inst
 Then open the MobaXterm to start a new SSH session, and here is the result
 ![image](https://github.com/user-attachments/assets/676d1774-46e7-4b29-af87-7598d582084e)
 
-> Note: if you choose correct key-pair, you will start new session successfully.
+> Note: if you choose correct key-pair, you will start new session successfully. You can ping to `https://amazon.com` or ping to `terra_private_ec2` or use `terra_public_ec2` connect SSH to `terra_private_ec2` with the same key-pair.
 
 ## 5 - Clean up resources
 
@@ -126,5 +129,5 @@ module.infrastructure.aws_internet_gateway.igw: Destruction complete after 1s
 module.infrastructure.aws_vpc.terranet: Destroying... [id=vpc-01f6eb1358aed7b2b]
 module.infrastructure.aws_vpc.terranet: Destruction complete after 0s
 
-Destroy complete! Resources: 14 destroyed.
+Destroy complete! Resources: 16 destroyed.
 ```

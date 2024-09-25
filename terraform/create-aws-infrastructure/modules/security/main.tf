@@ -13,8 +13,14 @@ resource "aws_security_group" "public_terra_sg" {
   }
 }
 
-# Define ingress of `public_terra_sg`
+# Define ingress and egress of `public_terra_sg`
 resource "aws_vpc_security_group_ingress_rule" "public_terra_sg_inbound" {
+  security_group_id = aws_security_group.public_terra_sg.id
+  cidr_ipv4 = "0.0.0.0/0"
+  ip_protocol = "-1"
+}
+
+resource "aws_vpc_security_group_egress_rule" "public_terra_sg_outbound" {
   security_group_id = aws_security_group.public_terra_sg.id
   cidr_ipv4 = "0.0.0.0/0"
   ip_protocol = "-1"
@@ -33,9 +39,15 @@ resource "aws_security_group" "private_terra_sg" {
   }
 }
 
-# Define ingress of `private_terra_sg`
+# Define ingress and egress of `private_terra_sg`
 resource "aws_vpc_security_group_ingress_rule" "private_terra_sg_inbound" {
   security_group_id = aws_security_group.private_terra_sg.id
   cidr_ipv4 = var.vpc_cidr
+  ip_protocol = "-1"
+}
+
+resource "aws_vpc_security_group_egress_rule" "private_terra_sg_outbound" {
+  security_group_id = aws_security_group.private_terra_sg.id
+  cidr_ipv4 = "0.0.0.0/0"
   ip_protocol = "-1"
 }
