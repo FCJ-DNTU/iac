@@ -2,6 +2,9 @@
 ## About
 In this example, we will deploy a simple NodeJS server to Docker.
 
+## Infrastucture
+![image](https://github.com/user-attachments/assets/1bb49e41-491c-40e4-82d9-35e8946a32ff)
+
 ## Steps
 ### 1 - Build image
 Before you start, you have to build the image to pack the source code of application. Change the current working directory to this directory, and run
