@@ -4,6 +4,9 @@ This is the first example of Terraform.
 ## About
 In this example, we will deploy a NginX server in Docker with Terraform.
 
+## Infrastructure
+![image](https://github.com/user-attachments/assets/28791e00-74fe-420d-b284-001ba43ef6ad)
+
 ## Steps
 ### 1 - Make plan
 First, you need to change your current work directory to this directory and tell Terraform makes plan in our source.

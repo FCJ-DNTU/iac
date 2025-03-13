@@ -8,6 +8,9 @@ Suppose you have an application which interacts with server to do some tasks, yo
 
 If you want to run the application without docker, you should run `scripts/install-mysql.sh` to install MySQL in your local machine.
 
+## Infrastructure
+![image](https://github.com/user-attachments/assets/6fcb7402-c942-4759-8b67-bae18c6f27b6)
+
 ### 1 - Install MySQL Server
 
 ```bash
