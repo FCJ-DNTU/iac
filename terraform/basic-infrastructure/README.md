@@ -34,7 +34,7 @@ Before we apply the configuration to deploy our resources, we had verify our con
 
 ```bash
 terraform validate
-terraform plan
+terraform plan --var-file=default.tfvars
 ```
 
 ### 3 - Apply the configuration to deploy
