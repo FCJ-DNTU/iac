@@ -71,7 +71,7 @@ resource "aws_apigatewayv2_route" "route" {
   route_key = "GET /example"
   target = "integrations/${aws_apigatewayv2_integration.integration.id}"
 }
-
+ 
 # Deploy API Gateway
 resource "aws_apigatewayv2_stage" "test" {
   api_id      = aws_apigatewayv2_api.example_api.id
